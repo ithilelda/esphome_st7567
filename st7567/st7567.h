@@ -14,7 +14,7 @@ using st7567_writer_t = std::function<void(ST7567 &)>;
 class ST7567 : public PollingComponent,
                public display::DisplayBuffer,
                public spi::SPIDevice<spi::BIT_ORDER_MSB_FIRST, spi::CLOCK_POLARITY_HIGH, spi::CLOCK_PHASE_TRAILING,
-                                     spi::DATA_RATE_1MHZ> {
+                                     spi::DATA_RATE_20MHZ> {
  public:
   void set_writer(st7567_writer_t &&writer) { this->writer_local_ = writer; }
   void set_reset_pin(GPIOPin *value) { this->reset_pin_ = value; }
@@ -33,8 +33,8 @@ class ST7567 : public PollingComponent,
 
  protected:
   // overrides that must be implemented in DisplayBuffer.
-  int get_height_internal() override { return this->width_; }
-  int get_width_internal() override { return this->height_; }
+  inline int get_height_internal() override { return this->height_; }
+  inline int get_width_internal() override { return this->width_; }
 
   void draw_absolute_pixel_internal(int x, int y, Color color) override;
 

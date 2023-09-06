@@ -16,13 +16,13 @@ static const uint8_t LCD_SETPAGEADDR = 0xB0;
 static const uint8_t LCD_SETCOLADDRMSB = 0x10;
 static const uint8_t LCD_SETCOLADDRLSB = 0x00;
 static const uint8_t LCD_SETREVSEGDIR = 0xA0;
-static const uint8_t LCD_SETINVERSE = 0xA6;
+static const uint8_t LCD_SETINVERT = 0xA6;
 static const uint8_t LCD_SETALLON = 0xA4;
 static const uint8_t LCD_SETBIAS = 0xA2;
 static const uint8_t LCD_STARTRMW = 0xE0;
 static const uint8_t LCD_ENDRMW = 0xEE;
 static const uint8_t LCD_SOFTRST = 0xE2;
-static const uint8_t LCD_SETCOMREV = 0xC0;
+static const uint8_t LCD_SETREVCOMDIR = 0xC0;
 static const uint8_t LCD_SETPWRCTRL = 0x28;
 static const uint8_t LCD_SETREGRATIO = 0x20;
 static const uint8_t LCD_EVSETSTART = 0x81;
@@ -49,8 +49,8 @@ void ST7567::dump_config() {
   LOG_PIN("  CS Pin: ", this->cs_);
   LOG_PIN("  Reset Pin: ", this->reset_pin_);
   LOG_PIN("  DC Pin: ", this->dc_pin_);
-  ESP_LOGCONFIG(TAG, "  Height: %d", this->height_);
   ESP_LOGCONFIG(TAG, "  Width: %d", this->width_);
+  ESP_LOGCONFIG(TAG, "  Height: %d", this->height_);
 }
 
 void ST7567::update() {
@@ -82,29 +82,30 @@ void ST7567::init_reset_() {
   if (this->reset_pin_ != nullptr) {
     this->reset_pin_->setup();
     this->reset_pin_->digital_write(true);
-    delay(1);
+    delay(50);
     // Trigger Reset
     this->reset_pin_->digital_write(false);
-    delay(10);
+    delay(500);
     // Wake up
     this->reset_pin_->digital_write(true);
+    delay(10);
   }
 }
 
 void ST7567::display_init_() {
   ESP_LOGD(TAG, "Initializing display...");
-  this->command_(LCD_SETBIAS|0);                 // set bias to 1/9.
-  this->command_(LCD_SETREVSEGDIR|0);            // set normal segment direction.
-  this->command_(LCD_SETINVERSE|0);              // set normal display direction.
-  this->command_(LCD_SETCOMREV|0);               // set normal COM direction.
-  this->command_(LCD_SETREGRATIO|0);             // set regulation ratio to 3.0;
-  this->command_(LCD_EVSETSTART);                // start setting EV;
-  this->command_(0x00);                          // set ev to 000;
-  this->command_(LCD_BOOSTERSETSTART);           // start setting booster;
-  this->command_(0x00);                          // set booster to x4;
-  this->command_(LCD_SETPWRCTRL|7);              // turn on all three built in power controls;
-  this->command_(LCD_SETDISPLAY|1);              // set display on;
-  this->write_display_data_();
+  this->command_(LCD_SETBIAS|0x01);                 // set bias to 1/7. (was 1/9, not working.)
+  this->command_(LCD_SETINVERT|0x00);               // set normal display mode. (inverted means black/white invert.)
+  this->command_(LCD_SETREVSEGDIR|0x01);            // set normal segment direction. (flipped left and right.)
+  this->command_(LCD_SETREVCOMDIR|0x00);            // set normal COM direction.
+  this->command_(LCD_SETREGRATIO|0x06);             // set regulation ratio to 4.5. (was 3.0, not working.)
+  this->command_(LCD_SETSTARTLINE|0x00);            // set startline to 0.
+  this->command_(LCD_EVSETSTART);                   // start setting EV.
+  this->command_(0x00);                             // set ev to 000.
+  this->command_(LCD_BOOSTERSETSTART);              // start setting booster.
+  this->command_(0x00);                             // set booster to x4.
+  this->command_(LCD_SETPWRCTRL|7);                 // turn on all three built in power controls.
+  this->command_(LCD_SETDISPLAY|1);                 // set display on.
 }
 
 void HOT ST7567::command_(uint8_t value) {
@@ -114,25 +115,16 @@ void HOT ST7567::command_(uint8_t value) {
   this->disable();
 }
 
-void HOT ST7567::data_(uint8_t value) {
-  this->enable();
-  this->dc_pin_->digital_write(true);
-  this->write_byte(value);
-  this->disable();
-}
-
 void HOT ST7567::write_display_data_() {
   for (int page = 0; page < this->get_height_internal() / 8; page++) {
-    this->enable();
+    uint8_t* b_start = this->buffer_ + (page * this->get_width_internal());
     this->command_(LCD_SETPAGEADDR|page);
     this->command_(LCD_SETCOLADDRMSB|0);
     this->command_(LCD_SETCOLADDRLSB|0);
-    for (int x = 0; x < get_width_internal(); x++) {
-      uint8_t b = this->buffer_[get_buffer_index_(x, page*8)];
-      this->data_(b);
-    }
+    this->enable();
+    this->dc_pin_->digital_write(true);
+    this->write_array(b_start, this->get_width_internal());
     this->disable();
-    App.feed_wdt();
   }
 }
 
