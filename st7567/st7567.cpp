@@ -94,18 +94,19 @@ void ST7567::init_reset_() {
 
 void ST7567::display_init_() {
   ESP_LOGD(TAG, "Initializing display...");
+  this->command_(LCD_SETDISPLAY|0x00);              // set display off.
   this->command_(LCD_SETBIAS|0x01);                 // set bias to 1/7. (was 1/9, not working.)
-  this->command_(LCD_SETINVERT|0x00);               // set normal display mode. (inverted means black/white invert.)
-  this->command_(LCD_SETREVSEGDIR|0x01);            // set normal segment direction. (flipped left and right.)
-  this->command_(LCD_SETREVCOMDIR|0x00);            // set normal COM direction.
+  this->command_(LCD_SETINVERT|this->inverted_);    // set display mode. (inverted means black/white invert.)
+  this->command_(LCD_SETREVSEGDIR|this->flip_x_);   // set segment direction. (flipped left and right.)
+  this->command_(LCD_SETREVCOMDIR|this->flip_y_);   // set COM direction.
   this->command_(LCD_SETREGRATIO|0x06);             // set regulation ratio to 4.5. (was 3.0, not working.)
   this->command_(LCD_SETSTARTLINE|0x00);            // set startline to 0.
   this->command_(LCD_EVSETSTART);                   // start setting EV.
   this->command_(0x00);                             // set ev to 000.
   this->command_(LCD_BOOSTERSETSTART);              // start setting booster.
   this->command_(0x00);                             // set booster to x4.
-  this->command_(LCD_SETPWRCTRL|7);                 // turn on all three built in power controls.
-  this->command_(LCD_SETDISPLAY|1);                 // set display on.
+  this->command_(LCD_SETPWRCTRL|0x07);              // turn on all three built in power controls.
+  this->command_(LCD_SETDISPLAY|0x01);              // set display on.
 }
 
 void HOT ST7567::command_(uint8_t value) {

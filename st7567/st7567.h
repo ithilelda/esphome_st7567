@@ -19,8 +19,13 @@ class ST7567 : public PollingComponent,
   void set_writer(st7567_writer_t &&writer) { this->writer_local_ = writer; }
   void set_reset_pin(GPIOPin *value) { this->reset_pin_ = value; }
   void set_dc_pin(GPIOPin *value) { this->dc_pin_ = value; }
-  void set_height(uint16_t height) { this->height_ = height; }
-  void set_width(uint16_t width) { this->width_ = width; }
+  void set_height(int h) { this->height_ = h; }
+  void set_width(int w) { this->width_ = w; }
+  void set_flip_x(bool b) { this->flip_x_ = b; }
+  void set_flip_y(bool b) { this->flip_y_ = b; }
+  void set_offset_x(int o) { this->offset_x_ = o; }
+  void set_offset_y(int o) { this->offset_y_ = o; }
+  void set_inverted(bool b) { this->inverted_ = b; }
 
   // ========== INTERNAL METHODS ==========
   void setup() override;
@@ -39,17 +44,17 @@ class ST7567 : public PollingComponent,
   void draw_absolute_pixel_internal(int x, int y, Color color) override;
 
   // custom methods.
-  inline int get_buffer_index_(int x, int y) { return y / 8 * get_width_internal() + x; }
-  inline int get_byte_index_(int x, int y) { return y % 8; }
-  size_t get_buffer_length_() { return size_t(this->get_width_internal()) * size_t(this->get_height_internal()) / 8u; }
+  inline int get_buffer_index_(int x, int y) { return ((y + this->offset_y_) % this->height_) / 8 * this->width_ + ((x + this->offset_x_) % this->width_); }
+  inline int get_byte_index_(int x, int y) { return ((y + this->offset_y_) % this->height_) % 8; }
+  size_t get_buffer_length_() { return size_t(this->width_) * size_t(this->height_) / 8u; }
 
   void init_reset_();
   void display_init_();
   void command_(uint8_t value);
-  void data_(uint8_t value);
   void write_display_data_();
 
-  int16_t width_ = 128, height_ = 64;
+  int width_ = 128, height_ = 64, offset_x_ = 0, offset_y_ = 0;
+  bool flip_x_ = true, flip_y_ = false, inverted_ = false;
   GPIOPin *reset_pin_{nullptr};
   GPIOPin *dc_pin_{nullptr};
   optional<st7567_writer_t> writer_local_{};
