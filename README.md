@@ -15,10 +15,10 @@ spi:
 
 display:
     - platform: st7567
-    cs_pin: GPIO4
-    dc_pin: GPIO5
-    reset_pin: GPIO1
-    lambda: |-
+      cs_pin: GPIO4
+      dc_pin: GPIO5
+      reset_pin: GPIO1
+      lambda: |-
         it.print(0, 0, id(font), "Hello World!");
 ```
 
