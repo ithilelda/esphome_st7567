@@ -1,4 +1,4 @@
-#ST7567 Display (128x64 lcd display) Component for ESPHome
+# ST7567 Display (128x64 lcd display) Component for ESPHome
 
 The ``st7567`` display platform allows you to use
 ST7567 ([Taobao](<https://item.taobao.com/item.htm?spm=a21n57.1.0.0.239a523cIT1eXy&id=691384985925&ns=1&abbucket=0#detail>))
@@ -22,7 +22,7 @@ display:
         it.print(0, 0, id(font), "Hello World!");
 ```
 
-##Configuration variables:
+## Configuration variables:
 
 - **cs_pin** (**Required**, :ref:`Pin Schema <config-pin_schema>`): The Chip Select (CS) pin.
 - **dc_pin** (**Required**, :ref:`Pin Schema <config-pin_schema>`): The A0 pin.
