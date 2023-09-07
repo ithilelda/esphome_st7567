@@ -4,7 +4,7 @@ ST7567 Display (128x64 lcd display) Component for ESPHome.
 ====================
 
 The ``st7567`` display platform allows you to use
-ST7567 (`Taobao <https://item.taobao.com/item.htm?spm=a21n57.1.0.0.239a523cIT1eXy&id=691384985925&ns=1&abbucket=0#detail>`)
+ST7567 ([Taobao](<https://item.taobao.com/item.htm?spm=a21n57.1.0.0.239a523cIT1eXy&id=691384985925&ns=1&abbucket=0#detail>))
 displays with ESPHome.
 
 Connect the pins according to the item description. ``CS`` to cs_pin, ``RST`` to reset_pin,  ``A0`` to dc_pin,
