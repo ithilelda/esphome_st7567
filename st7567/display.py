@@ -24,8 +24,8 @@ CONFIG_SCHEMA = (
         {
             cv.GenerateID(): cv.declare_id(ST7567),
             cv.Required(CONF_DC_PIN): pins.gpio_output_pin_schema,
-            cv.Optional(CONF_WIDTH, default=128): cv.int_,
-            cv.Optional(CONF_HEIGHT, default=64): cv.int_,
+            cv.Optional(CONF_WIDTH, default=128): cv.int_range(min=0, max=132),
+            cv.Optional(CONF_HEIGHT, default=64): cv.int_range(min=0, max=64),
             cv.Optional(CONF_FLIP_X, default=True): cv.boolean,
             cv.Optional(CONF_FLIP_Y, default=False): cv.boolean,
             cv.Optional(CONF_OFFSET_X, default=0): cv.int_range(min=-64, max=64),

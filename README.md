@@ -29,8 +29,8 @@ display:
 - **reset_pin** (*Optional*, :ref:`Pin Schema <config-pin_schema>`): The RESET pin. Defaults to not connected.
 - **rotation** (*Optional*): Set the rotation of the display. Everything you draw in ``lambda:`` will be rotated
   by this option. One of ``0°`` (default), ``90°``, ``180°``, ``270°``.
-- **width** (*Optional*, int): Width of the display. Defaults to ``128``.
-- **height** (*Optional*, int): Height of the display. Defaults to ``64``.
+- **width** (*Optional*, int): Width of the display. Numbers are only allowed between ``0~132``. Defaults to ``128``.
+- **height** (*Optional*, int): Height of the display. Numbers are only allowed between ``0~64``. Defaults to ``64``.
 - **flip_x** (*Optional*, boolean): Flip the horizontal axis on the screen. Defaults to ``true``.
 - **flip_y** (*Optional*, boolean): Flip the vertical axis on the screen. Defaults to ``false``.
 - **offset_x** (*Optional*, int): Set this option if some horizontal pixel is missing. Numbers are only allowed between ``-64~64``. Defaults to ``0``.

@@ -117,7 +117,7 @@ void HOT ST7567::command_(uint8_t value) {
 }
 
 void HOT ST7567::write_display_data_() {
-  for (int page = 0; page < this->get_height_internal() / 8; page++) {
+  for (int page = 0; page < this->get_page_size(); page++) {
     uint8_t* b_start = this->buffer_ + (page * this->get_width_internal());
     this->command_(LCD_SETPAGEADDR|page);
     this->command_(LCD_SETCOLADDRMSB|0);

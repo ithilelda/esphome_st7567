@@ -44,9 +44,10 @@ class ST7567 : public PollingComponent,
   void draw_absolute_pixel_internal(int x, int y, Color color) override;
 
   // custom methods.
+  inline int get_page_size() {return (this->height_ + 7) / 8;}
   inline int get_buffer_index_(int x, int y) { return ((y + this->offset_y_) % this->height_) / 8 * this->width_ + ((x + this->offset_x_) % this->width_); }
   inline int get_byte_index_(int x, int y) { return ((y + this->offset_y_) % this->height_) % 8; }
-  size_t get_buffer_length_() { return size_t(this->width_) * size_t(this->height_) / 8u; }
+  size_t get_buffer_length_() { return size_t(this->width_) * size_t(this->get_page_size()); }
 
   void init_reset_();
   void display_init_();
