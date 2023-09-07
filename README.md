@@ -1,7 +1,4 @@
-# esphome_st7567
-
-ST7567 Display (128x64 lcd display) Component for ESPHome.
-====================
+#ST7567 Display (128x64 lcd display) Component for ESPHome
 
 The ``st7567`` display platform allows you to use
 ST7567 ([Taobao](<https://item.taobao.com/item.htm?spm=a21n57.1.0.0.239a523cIT1eXy&id=691384985925&ns=1&abbucket=0#detail>))
@@ -10,29 +7,30 @@ displays with ESPHome.
 Connect the pins according to the item description. ``CS`` to cs_pin, ``RST`` to reset_pin,  ``A0`` to dc_pin,
 ``SCK`` to clk_pin, and finally ``SDA`` to mosi_pin.
 
-.. code-block:: yaml
+```yaml
+# Example configuration entry
+spi:
+    clk_pin: GPIO0
+    mosi_pin: GPIO3
 
-    # Example configuration entry
-    spi:
-      clk_pin: GPIO0
-      mosi_pin: GPIO3
+display:
+    - platform: st7567
+    cs_pin: GPIO4
+    dc_pin: GPIO5
+    reset_pin: GPIO1
+    lambda: |-
+        it.print(0, 0, id(font), "Hello World!");
+```
 
-    display:
-      - platform: st7567
-        cs_pin: GPIO4
-        dc_pin: GPIO5
-        reset_pin: GPIO1
-        lambda: |-
-          it.print(0, 0, id(font), "Hello World!");
-
-Configuration variables:
-************************
+##Configuration variables:
 
 - **cs_pin** (**Required**, :ref:`Pin Schema <config-pin_schema>`): The Chip Select (CS) pin.
 - **dc_pin** (**Required**, :ref:`Pin Schema <config-pin_schema>`): The A0 pin.
 - **reset_pin** (*Optional*, :ref:`Pin Schema <config-pin_schema>`): The RESET pin. Defaults to not connected.
 - **rotation** (*Optional*): Set the rotation of the display. Everything you draw in ``lambda:`` will be rotated
   by this option. One of ``0°`` (default), ``90°``, ``180°``, ``270°``.
+- **width** (*Optional*, int): Width of the display. Defaults to ``128``.
+- **height** (*Optional*, int): Height of the display. Defaults to ``64``.
 - **flip_x** (*Optional*, boolean): Flip the horizontal axis on the screen. Defaults to ``true``.
 - **flip_y** (*Optional*, boolean): Flip the vertical axis on the screen. Defaults to ``false``.
 - **offset_x** (*Optional*, int): Set this option if some horizontal pixel is missing. Numbers are only allowed between ``-64~64``. Defaults to ``0``.
