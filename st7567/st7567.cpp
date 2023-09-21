@@ -99,12 +99,12 @@ void ST7567::display_init_() {
   this->command_(LCD_SETREVSEGDIR|this->flip_x_);   // set segment direction. (flipped left and right.)
   this->command_(LCD_SETREVCOMDIR|this->flip_y_);   // set COM direction.
   this->command_(LCD_SETSTARTLINE|0x00);            // set startline to 0.
-  this->command_(LCD_SETBIAS|0x00);                 // set bias to 1/9.
-  this->command_(LCD_SETREGRATIO|0x04);             // set regulation ratio to 5.0.
+  this->command_(LCD_SETBIAS|this->bias_);          // set bias.
+  this->command_(LCD_SETREGRATIO|this->reg_ratio_); // set regulation ratio.
   this->command_(LCD_EVSETSTART);                   // start setting EV.
-  this->command_(0x1F);                             // set ev to 0x1F in the cernter.
+  this->command_(this->ev_);                        // set ev.
   this->command_(LCD_BOOSTERSETSTART);              // start setting booster.
-  this->command_(0x00);                             // set booster to x4.
+  this->command_(this->booster_);                   // set booster.
   this->command_(LCD_SETPWRCTRL|0x07);              // turn on all three built in power controls.
   this->command_(LCD_SETDISPLAY|0x01);              // set display on.
 }

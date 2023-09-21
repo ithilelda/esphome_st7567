@@ -25,6 +25,10 @@ class ST7567 : public PollingComponent,
   void set_flip_y(bool b) { this->flip_y_ = b; }
   void set_offset_x(int o) { this->offset_x_ = o; }
   void set_offset_y(int o) { this->offset_y_ = o; }
+  void set_reg_ratio(int o) { this->reg_ratio_ = o; }
+  void set_ev(int o) { this->ev_ = o; }
+  void set_bias(bool b) { this->bias_ = b; }
+  void set_booster(bool b) { this->booster_ = b; }
   void set_inverted(bool b) { this->inverted_ = b; }
 
   // ========== INTERNAL METHODS ==========
@@ -54,8 +58,8 @@ class ST7567 : public PollingComponent,
   void command_(uint8_t value);
   void write_display_data_();
 
-  int width_ = 128, height_ = 64, offset_x_ = 0, offset_y_ = 0;
-  bool flip_x_ = true, flip_y_ = false, inverted_ = false;
+  int width_ = 128, height_ = 64, offset_x_ = 0, offset_y_ = 0, reg_ratio_ = 0, ev_ = 0;
+  bool flip_x_ = true, flip_y_ = false, inverted_ = false, bias_ = false, booster_ = false;
   GPIOPin *reset_pin_{nullptr};
   GPIOPin *dc_pin_{nullptr};
   optional<st7567_writer_t> writer_local_{};
