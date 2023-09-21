@@ -35,7 +35,12 @@ display:
 - **flip_y** (*Optional*, boolean): Flip the vertical axis on the screen. Defaults to ``false``.
 - **offset_x** (*Optional*, int): Set this option if some horizontal pixel is missing. Numbers are only allowed between ``-64~64``. Defaults to ``0``.
 - **offset_y** (*Optional*, int): Set this option if some vertical pixel is missing. Numbers are only allowed between ``-32~32``. Defaults to ``0``.
+- **reg_ratio** (*Optional*, int): Set this option and ev_value to setup contrast. Numbers are only allowed between ``0~7``. Defaults to ``0``.
+- **ev_value** (*Optional*, int): Set this option and reg_ratio to setup contrast. Numbers are only allowed between ``0~63``. Defaults to ``0``.
+  A middle value is recommended by the datasheet.
 - **invert** (*Optional*, boolean): Invert all pixel state on the display. Defaults to ``false``.
+- **bias_high** (*Optional*, boolean): If set to true, the bias will be 1/7, otherwise it will be 1/9. Defaults to ``false``.
+- **booster_high** (*Optional*, boolean): If set to true, the booster will be x5, otherwise it will be x4. Defaults to ``false``.
 - **lambda** (*Optional*, :ref:`lambda <config-lambda>`): The lambda to use for rendering the content on the display.
   See :ref:`display-engine` for more information.
 - **update_interval** (*Optional*, :ref:`config-time`): The interval to re-draw the screen. Defaults to ``1s``.
